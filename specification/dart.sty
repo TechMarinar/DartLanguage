@@ -119,10 +119,10 @@
 \newenvironment{commentary}[1]{{\color{commentaryColor}\sf{#1}}}{}
 
 % Auxiliary functions.
-\newcommand{\flatten}[1]{\ensuremath{\mbox{\it flatten}({#1})}}
-\newcommand{\futureOrBase}[1]{\ensuremath{\mbox{\it futureOrBase}({#1})}}
-\newcommand{\overrides}[1]{\ensuremath{\mbox{\it overrides}({#1})}}
-\newcommand{\inherited}[1]{\ensuremath{\mbox{\it inherited}({#1})}}
+\newcommand{\flatten}[1]{\ensuremath{\metavar{flatten}({#1})}}
+\newcommand{\futureOrBase}[1]{\ensuremath{\metavar{futureOrBase}({#1})}}
+\newcommand{\overrides}[1]{\ensuremath{\metavar{overrides}({#1})}}
+\newcommand{\inherited}[1]{\ensuremath{\metavar{inherited}({#1})}}
 
 % Used as a mini-section marker, indicating visibly that a range of
 % text (usually just a couple of paragraphs) are concerned with one
@@ -392,6 +392,39 @@
   \ensuremath{{#1}\stackrel{\vartriangle}{=}}\\
   \ensuremath{{#2}}%
 }
+
+\newcommand{\FlattenName}{\metavar{flatten}}
+\newcommand{\Flatten}[1]{\ensuremath{\FlattenName(\code{#1})}}
+
+\newcommand{\NnbdTopMergeName}{\metavar{topMerge}}
+\newcommand{\NnbdTopMerge}[2]{\ensuremath{\NnbdTopMergeName(\code{{#1},\,\,{#2}})}}
+
+\newcommand{\NonNullTypeOfName}{\metavar{nonNullTypeOf}}
+\newcommand{\NonNullTypeOf}[1]{\ensuremath{\NonNullTypeOfName(\code{#1})}}
+
+\newcommand{\IsTopTypeName}{\metavar{isTopType}}
+\newcommand{\IsTopType}[1]{\ensuremath{\IsTopTypeName(\code{#1})}}
+
+\newcommand{\IsObjectTypeName}{\metavar{isObjectType}}
+\newcommand{\IsObjectType}[1]{\ensuremath{\IsObjectTypeName(\code{#1})}}
+
+\newcommand{\IsBottomTypeName}{\metavar{isBottomType}}
+\newcommand{\IsBottomType}[1]{\ensuremath{\IsBottomTypeName(\code{#1})}}
+
+\newcommand{\IsNullTypeName}{\metavar{isNullType}}
+\newcommand{\IsNullType}[1]{\ensuremath{\IsNullTypeName(\code{#1})}}
+
+\newcommand{\IsMoreTopTypeName}{\metavar{isMoreTopType}}
+\newcommand{\IsMoreTopType}[2]{\ensuremath{\IsMoreTopTypeName(\code{{#1},\,\,{#2}})}}
+
+\newcommand{\IsMoreBottomTypeName}{\metavar{isMoreBottomType}}
+\newcommand{\IsMoreBottomType}[2]{\ensuremath{\IsMoreBottomTypeName(\code{{#1},\,\,{#2}})}}
+
+\newcommand{\NormalizedTypeOfName}{\metavar{normalizedTypeOf}}
+\newcommand{\NormalizedTypeOf}[1]{\ensuremath{\NormalizedTypeOfName(\code{#1})}}
+
+\newcommand{\FutureValueTypeOfName}{\metavar{futureValueTypeOf}}
+\newcommand{\FutureValueTypeOf}[1]{\ensuremath{\FutureValueTypeOfName(\code{#1})}}
 
 % ----------------------------------------------------------------------
 % Support for hash valued Location Markers
