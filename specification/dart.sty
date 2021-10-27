@@ -280,8 +280,8 @@
 % Arguments: Parameter type, number of required parameters,
 % name of optional parameters, number of optional parameters.
 \newcommand{\FunctionTypeNamedArguments}[4]{%
-  \List{#1}{1}{#2},\ \{\PairList{#1}{#3}{{#2}+1}{{#2}+{#4}}\}}
-
+  \List{#1}{1}{#2},\ \{\TripleList{r}{#1}{#3}{{#2}+1}{{#2}+{#4}}\}}
+  
 \newcommand{\FunctionTypeNamedArgumentsStd}{%
   \FunctionTypeNamedArguments{T}{n}{x}{k}}
 
@@ -290,8 +290,8 @@
 %   number of type parameters, parameter type, number of required parameters,
 %   name of optional parameters, number of optional parameters.
 \newcommand{\FunctionTypeNamed}[9]{%
-  \FunctionType{#1}{#2}{#3}{#4}{#5}{%
-    \FunctionTypeNamedArguments{#6}{#7}{#8}{#9}}}
+  \FunctionType{#1}{#2}{#3}{#4}{#5}{\\
+    \mbox{}\qquad\FunctionTypeNamedArguments{#6}{#7}{#8}{#9}}}
 
 % Same as \FunctionType except suitable for inline usage, hence omitting
 % the spacer argument.
@@ -326,6 +326,9 @@
 
 \newcommand{\FunctionTypeNamedStdCr}[1]{%
   \FunctionTypeNamed{#1}{\\}{X}{B}{s}{T}{n}{x}{k}}
+
+\newcommand{\FunctionTypeNamedStdArgCr}[1]{%
+  \FunctionTypeNamedArgCr{#1}{ }{X}{B}{s}{T}{n}{x}{k}}
 
 \newcommand{\FunctionTypeAllRequiredStdCr}[1]{%
   \FunctionTypeAllRequired{#1}{\\}{X}{B}{s}{T}{n}}
@@ -399,7 +402,7 @@
 \newcommand{\NnbdTopMergeName}{\metavar{topMerge}}
 \newcommand{\NnbdTopMerge}[2]{\ensuremath{\NnbdTopMergeName(\code{{#1},\,\,{#2}})}}
 
-\newcommand{\NonNullTypeOfName}{\metavar{nonNullTypeOf}}
+\newcommand{\NonNullTypeOfName}{\metavar{nonNullType}}
 \newcommand{\NonNullTypeOf}[1]{\ensuremath{\NonNullTypeOfName(\code{#1})}}
 
 \newcommand{\IsTopTypeName}{\metavar{isTopType}}
@@ -420,11 +423,13 @@
 \newcommand{\IsMoreBottomTypeName}{\metavar{isMoreBottomType}}
 \newcommand{\IsMoreBottomType}[2]{\ensuremath{\IsMoreBottomTypeName(\code{{#1},\,\,{#2}})}}
 
-\newcommand{\NormalizedTypeOfName}{\metavar{normalizedTypeOf}}
+\newcommand{\NormalizedTypeOfName}{\metavar{normalizedType}}
 \newcommand{\NormalizedTypeOf}[1]{\ensuremath{\NormalizedTypeOfName(\code{#1})}}
 
-\newcommand{\FutureValueTypeOfName}{\metavar{futureValueTypeOf}}
+\newcommand{\FutureValueTypeOfName}{\metavar{futureValueType}}
 \newcommand{\FutureValueTypeOf}[1]{\ensuremath{\FutureValueTypeOfName(\code{#1})}}
+
+\newcommand{\DefEquals}[2]{\ensuremath{{#1}\stackrel{\triangle}{=}{#2}}}
 
 % ----------------------------------------------------------------------
 % Support for hash valued Location Markers
