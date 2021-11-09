@@ -1375,6 +1375,8 @@ is a variable which is not final.
 \LMHash{}%
 The following rules on implicitly induced getters and setters
 apply to all static and instance variables.
+For each form of declaration mentioned,
+the modifier \STATIC{} may be present or absent.
 
 \LMHash{}%
 A variable declaration of one of the forms
@@ -1442,7 +1444,7 @@ and subsequent executions incur a dynamic error.
 
 \LMHash{}%
 A mutable variable declaration of the form
-\code{\VAR\,\,\id;}
+\code{\LATE?\,\,\VAR\,\,\id;}
 induces an implicit setter function with header
 \code{\VOID\,\,\SET\,\,\id(\DYNAMIC\,\,$x$)},
 whose execution sets the value of \id{} to the incoming argument $x$.
@@ -1463,11 +1465,9 @@ whose execution sets the value of \id{} to the incoming argument $x$.
 
 \LMHash{}%
 A variable declaration of the form
-\code{\LATE\,\,\FINAL\,\,\id;} or
-\code{\LATE\,\,\FINAL\,\,$T$\,\,\id;}
+\code{\LATE\,\,\FINAL\,\,\id;}
 induces an implicit setter function with header
-\code{\VOID\,\,\SET\,\,\id($T$\,\,$x$)}
-where $T$ is the static type of $e$ if present and otherwise \DYNAMIC.
+\code{\VOID\,\,\SET\,\,\id(\DYNAMIC\,\,$x$)}.
 The first execution of said setter sets the value of \id{} to
 the incoming argument $x$,
 and subsequent executions incur a dynamic error.
@@ -1597,21 +1597,19 @@ a subtype of the actual type of the variable \id{}
 \LMHash{}%
 \BlindDefineSymbol{d, \id}%
 Let $d$ be the declaration of a static or instance variable named \id.
-\commentary{%
-For brevity, we will refer to it as `the variable \id' or just `\id',
-or as `the variable $d$' or just `$d$'.%
-}
+For brevity, we will refer to it below as
+`the variable \id' or `the variable $d$', or just as `\id' or `$d$'.
 
 \LMHash{}%
 \Case{Non-late instance variable}
-If $d$ is an instance variable which does not have the modifier \LATE,
+If $d$ declares an instance variable which does not have the modifier \LATE,
 then the invocation of the implicit getter of \id{} evaluates to
 the object stored in \id.
 \EndCase
 
 \LMHash{}%
 \Case{Late, initialized instance variable}
-If $d$ is an instance variable which has the modifier \LATE{}
+If $d$ declares an instance variable which has the modifier \LATE{}
 and an initializing expression $e$,
 then the first invocation of the implicit getter of \id{}
 will evaluate $e$ to an object $o$, store $o$ in \id{},
@@ -1638,7 +1636,7 @@ $e$ will never be executed.%
 
 \LMHash{}%
 \Case{Late, uninitialized instance variable}
-Consider the case where $d$ is an instance variable
+Consider the case where $d$ declares an instance variable
 which has the modifier \LATE{} and no initializing expression.
 Assume that the corresponding setter has been executed and did not throw.
 In this case, an invocation of the implicit getter of \id{}
@@ -1649,49 +1647,48 @@ the getter invocation will throw.
 
 \LMHash{}%
 \Case{Static variable}
-If $d$ is a static variable
+If $d$ declares a static variable
 (\commentary{that is, a library variable or a class variable}),
 the implicit getter method of \id{} executes as follows:
 
 \begin{itemize}
 \item \emph{Non-constant variable with an initializer.}
-  Consider the case where the declaration $d$ has one of the forms
-  \code{\LATE?\,\,\VAR\,\,\id{} = $e$;},
-  \code{\LATE?\,\,$T$\,\,\id{} = $e$;},\\
-  \code{\LATE?\,\,\FINAL\,\,\id{} = $e$;},
-  \code{\LATE?\,\,\FINAL\,\,$T$\,\,\id{} = $e$;},
-  \code{\STATIC\,\,\LATE?\,\,\id{} = $e$;},\\
-  \code{\STATIC\,\,\LATE?\,\,$T$\,\,\id{} = $e$;},
-  \code{\STATIC\,\,\LATE?\,\,\FINAL\,\,\id{} = $e$;},\\
-  or
-  \code{\STATIC\,\,\LATE?\,\,\FINAL\,\,$T$\,\,\id{} = $e$;}.
-  
+  Consider the case where $d$ has one of the forms
+  \code{\STATIC?\,\,\LATE?\,\,\VAR\,\,\id{} = $e$;},
+  \code{\STATIC?\,\,\LATE?\,\,\FINAL\,\,\id{} = $e$;}, or
+  \code{\STATIC?\,\,\LATE?\,\,\FINAL?\,\,$T$\,\,\id{} = $e$;}.
 
-  no object has yet been stored into \id{}
-  then the initializing expression $e$ is evaluated.
+  The first invocation of the implicit getter of \id{}
+  will evaluate $e$ to an object $o$, store $o$ in \id{},
+  and evaluate to $o$;
+  if the evaluation of $e$ throws,
+  the invocation of the getter throws the same object and stack trace,
+  and the next invocation of the implicit getter of \id{}
+  is considered to be the first invocation.
+  A non-first invocation of the implicit getter of \id{} evaluates to
+  the object stored in \id.
 
+  If \id{} has an implicitly induced setter,
+  and this setter is invoked and completes normally,
+  the next execution of the implicitly induced getter of \id{}
+  is considered to be non-first.
 
-  If the evaluation of $e$ throws an exception $e$ and stack trace $s$,
-  the null object (\ref{null}) is stored into $v$;
-  the execution of the getter then throws $e$ and stack trace $s$.
-  Otherwise, the evaluation of $e$ succeeded yielding an object $o$;
-  then $o$ is stored into $v$ and
-  the execution of the getter completes by returning $o$.
-  Otherwise,
-  (\commentary{when an object $o$ has been stored in $v$})
-  execution of the getter completes by returning $o$.
+  \commentary{%
+  Note that the setter of a \LATE\,\,\FINAL{} variable
+  without an initializing expression
+  will throw if it is invoked multiple times.%
+  }
 \item \emph{Constant variable.}
   If $d$ is of one of the forms
-  \code{\LATE?\,\,\CONST{} $v$ = $e$;},
-  \code{\LATE?\,\,\CONST{} $T$ $v$ = $e$;},
-  \code{\LATE?\,\,\STATIC{} \CONST{} $v$ = $e$;} or
-  \code{\LATE?\,\,\STATIC{} \CONST{} $T$ $v$ = $e$;}
+  \code{\STATIC?\,\,\LATE?\,\,\CONST{} $v$ = $e$;} or
+  \code{\STATIC?\,\,\LATE?\,\,\CONST{} $T$ $v$ = $e$;}.
   the result of the getter is the value of the constant expression $e$.
   \commentary{%
   Note that a constant expression cannot depend on itself,
   so no cyclic references can occur.%
   }
 \item \emph{Variable without an initializer.}
+
   The result of executing the getter method is the object stored in $v$.
   \commentary{This may be the initial value, that is, the null object.}
 \end{itemize}
