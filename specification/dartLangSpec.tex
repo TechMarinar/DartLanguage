@@ -1337,7 +1337,8 @@ has the modifier \STATIC.
 
 \LMHash{}%
 A \Error{compile-time error} occurs if a static variable has a
-non-nullable type and no initializing expression,
+no initializing expression and a type which is not nullable
+(\ref{typeNullability}),
 unless the variable declaration has
 the modifier \LATE{} or \EXTERNAL.
 
@@ -1649,7 +1650,7 @@ the getter invocation will throw.
 \Case{Static variable}
 If $d$ declares a static variable
 (\commentary{that is, a library variable or a class variable}),
-the implicit getter method of \id{} executes as follows:
+the implicitly induced getter of \id{} executes as follows:
 
 \begin{itemize}
 \item \emph{Non-constant variable with an initializer.}
@@ -1658,14 +1659,14 @@ the implicit getter method of \id{} executes as follows:
   \code{\STATIC?\,\,\LATE?\,\,\FINAL\,\,\id{} = $e$;}, or
   \code{\STATIC?\,\,\LATE?\,\,\FINAL?\,\,$T$\,\,\id{} = $e$;}.
 
-  The first invocation of the implicit getter of \id{}
+  The first invocation of the implicitly induced getter of \id{}
   will evaluate $e$ to an object $o$, store $o$ in \id{},
   and evaluate to $o$;
   if the evaluation of $e$ throws,
   the invocation of the getter throws the same object and stack trace,
-  and the next invocation of the implicit getter of \id{}
+  and the next invocation of the getter of \id{}
   is considered to be the first invocation.
-  A non-first invocation of the implicit getter of \id{} evaluates to
+  A non-first invocation of the getter of \id{} evaluates to
   the object stored in \id.
 
   If \id{} has an implicitly induced setter,
@@ -1682,15 +1683,41 @@ the implicit getter method of \id{} executes as follows:
   If $d$ is of one of the forms
   \code{\STATIC?\,\,\LATE?\,\,\CONST{} $v$ = $e$;} or
   \code{\STATIC?\,\,\LATE?\,\,\CONST{} $T$ $v$ = $e$;}.
-  the result of the getter is the value of the constant expression $e$.
+  the result of the executing the implicitly induced getter is
+  the value of the constant expression $e$.
   \commentary{%
   Note that a constant expression cannot depend on itself,
   so no cyclic references can occur.%
   }
 \item \emph{Variable without an initializer.}
+  Consider the case where $d$ has one of the forms
+  \code{\STATIC?\,\,\VAR\,\,\id;} or
+  \code{\STATIC?\,\,$T$\,\,\id;}.
+  The result of executing the implicitly induced getter of \id{} is
+  the object stored in \id.
 
-  The result of executing the getter method is the object stored in $v$.
-  \commentary{This may be the initial value, that is, the null object.}
+  \commentary{%
+  This may be the initial value, that is, the null object
+  (the typed variant is an error unless $T$ is nullable).
+  Note that forms like \code{\FINAL\,\,\id;} and
+  \code{\FINAL\,\,$T$\,\,\id;} are irrelevant here:
+  They are syntax errors at the top level,
+  and instance variables were specified earlier in this section.
+  The forms \code{\STATIC\,\,\FINAL\,\,\id;} and
+  \code{\STATIC\,\,\FINAL\,\,$T$\,\,\id;}
+  are syntax errors as well.%
+  }
+
+  Consider the situation where $d$ has one of the forms
+  \code{\STATIC?\,\,\LATE\,\,\VAR\,\,\id;},
+  \code{\STATIC?\,\,\LATE\,\,\FINAL\,\,\id;}, or
+  \code{\STATIC?\,\,\LATE\,\,\FINAL?\,\,$T$\,\,\id;}.
+  The result of the execution of the implicitly induced getter of \id{}
+  is the object stored in \id{} if the corresponding implicitly induced setter
+  has been executed.
+  \commentary{Note that this setter cannot throw during the first execution.}
+  Otherwise, if said setter has not been executed,
+  the execution of the getter throws.
 \end{itemize}
 
 
@@ -23437,6 +23464,8 @@ Consequently, such a variable shall be treated as immediately promoted to \code{
 T}.
 
 \subsubsection{Expression typing}
+
+!!!TODO!!!
 
 It is permitted to invoke or tear-off a method, setter, getter, or operator that
 is defined on \code{Object} on potentially nullable type.  The type used for static
