@@ -193,6 +193,22 @@
 \newcommand{\PairList}[4]{\ensuremath{%
   {#1}_{#3}\ {#2}_{#3},\,\ldots,\ {#1}_{#4}\ {#2}_{#4}}}
 
+% Used to specify named arguments.
+% Parameters: Parameter name, argument name, index at start, index at end.
+\newcommand{\NamedArgumentList}[4]{\PairList{#1}{\!\!:\,\,{#2}}{#3}{#4}}
+
+% Used to specify an argument list including positional and named arguments.
+% Parameters: Argument name, number of positional arguments, named parameter
+% name, number of named arguments.
+\newcommand{\ArgumentList}[4]{%
+  \List{#1}{1}{#2},\ \NamedArgumentList{#3}{#1}{{#2}+1}{{#2}+{#4}}}
+
+% Used to specify a standard argument list.
+\newcommand{\ArgumentListStd}{\ArgumentList{a}{n}{x}{k}}
+
+% Used to specify a standard type argument list.
+\newcommand{\TypeArgumentListStd}{\List{A}{1}{r}}
+
 % Used to specify a list of tuples of the form $(K_j, V_j)$ which are
 % used with collection literals.
 \newcommand{\KeyValueTypeList}[4]{\ensuremath{%
