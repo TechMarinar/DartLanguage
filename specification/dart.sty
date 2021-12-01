@@ -68,6 +68,9 @@
 \def\WITH{\keyword{with}}
 \def\YIELD{\keyword{yield}}
 
+% Used for inline code snippets.
+\newcommand{\code}[1]{\texttt{#1}}
+
 % Used to specify syntactic sugar.
 \def\LET{\keyword{let}}
 \newcommand{\Let}[3]{\code{\LET\,\,{#1}\,=\,{#2}\ \IN\ {#3}}}
@@ -78,8 +81,8 @@
 \newcommand{\LetMany}[5]{%
   \code{\LET\,\,{#1}\,=\,{#2},\ $\cdots$,\ {#3}\,=\,{#4}\ \IN\ {#5}}}
 
-% Used for inline code snippets.
-\def\code#1{\texttt{#1}}
+% Used for inline meta-code snippets
+\newcommand{\metaCode}[1]{{\color{metaColor}\texttt{#1}}}
 
 % `call` has no special lexical status, so we just use \code{}.
 \def\CALL{\code{call}}
@@ -112,6 +115,7 @@
 \definecolor{normativeColor}{rgb}{0,0,0}
 \definecolor{commentaryColor}{rgb}{0.5,0.5,0.5}
 \definecolor{rationaleColor}{rgb}{0.5,0.5,0.5}
+\definecolor{metaColor}{rgb}{0,0,1}
 
 % Environments for different kinds of text.
 \newenvironment{Q}[1]{{\bf{}Upcoming: {#1}}}{}
@@ -131,7 +135,7 @@
 \newcommand{\Case}[1]{\textbf{Case }$\langle\hspace{0.1em}${#1}$\hspace{0.1em}\rangle$\textbf{.}}
 \newcommand{\EndCase}{\mbox{}\hfill$\scriptscriptstyle\Box$\xspace}
 
-\newenvironment{dartCode}[1][!ht] {%
+\newenvironment{dartCode}[1][!ht]{%
   \def\@programcr{\@addfield\strut}%
   \let\\=\@programcr%
   \relax\@vobeyspaces\obeylines%
@@ -139,11 +143,19 @@
   \vspace{1em}%
 }{\normalcolor\vspace{1em}}
 
-\newenvironment{normativeDartCode}[1][!ht] {%
+\newenvironment{normativeDartCode}[1][!ht]{%
   \def\@programcr{\@addfield\strut}%
   \let\\=\@programcr%
   \relax\@vobeyspaces\obeylines%
   \ttfamily\color{normativeColor}%
+  \vspace{1em}%
+}{\normalcolor\vspace{1em}}
+
+\newenvironment{metaLevelCode}[1][!ht]{%
+  \def\@programcr{\@addfield\strut}%
+  \let\\=\@programcr%
+  \relax\@vobeyspaces\obeylines%
+  \ttfamily\color{metaColor}%
   \vspace{1em}%
 }{\normalcolor\vspace{1em}}
 
