@@ -11756,9 +11756,15 @@ which is used below and in other sections, as follows:
 
 \item{} If $T$ implements \code{Future<$S$>}
   (\ref{interfaceSuperinterfaces})
-  then \DefEquals{\flatten{T}}{S}.
-
-\item{} Otherwise, \DefEquals{\flatten{T}}{T}.
+  then \DefEquals{\Flatten{$T$}}{S}.
+\item If $T$ is a $B$ bounded type variable
+  (\ref{typesBoundedByTypes})
+  or intersection type
+  (\ref{intersectionTypes})
+  where \SubtypeNE{\code{Object}}{B} then
+  \DefEquals{\Flatten{$T$}}{\code{Object?}}.
+\item Otherwise,
+  \DefEquals{\Flatten{$T$}}{T}.
 \end{itemize}
 
 \commentary{%
