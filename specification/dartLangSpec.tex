@@ -11743,26 +11743,17 @@ We define the auxiliary function
 which is used below and in other sections, as follows:
 
 \begin{itemize}
-\item{} If $T$ is a type variable $X$ with bound $B$,
+\item If $T$ is a type variable $X$ with bound $B$,
   or $T$ is an intersection type
   (\ref{intersectionTypes})
   \code{$X$\,\,\&\,\,$B$},
-  then \DefEquals{\flatten{T}}{\flatten{B}}.
-
-\item{} If $T$ is \code{$S$?}\ for some $S$
-  then \DefEquals{\flatten{T}}{\code{\flatten{S}?}}.
-
-\item{} If $T$ is \code{FutureOr<$S$>} then \DefEquals{\flatten{T}}{S}.
-
-\item{} If $T$ implements \code{Future<$S$>}
+  then \DefEquals{\Flatten{$T$}}{\code{\Flatten{$B$}}}.
+\item If $T$ is \code{$S$?}\ for some $S$
+  then \DefEquals{\Flatten{$T$}}{\code{\Flatten{$S$}?}}.
+\item If $T$ is \code{FutureOr<$S$>} then \DefEquals{\Flatten{$T$}}{S}.
+\item If $T$ implements \code{Future<$S$>}
   (\ref{interfaceSuperinterfaces})
   then \DefEquals{\Flatten{$T$}}{S}.
-\item If $T$ is a $B$ bounded type variable
-  (\ref{typesBoundedByTypes})
-  or intersection type
-  (\ref{intersectionTypes})
-  where \SubtypeNE{\code{Object}}{B} then
-  \DefEquals{\Flatten{$T$}}{\code{Object?}}.
 \item Otherwise,
   \DefEquals{\Flatten{$T$}}{T}.
 \end{itemize}
